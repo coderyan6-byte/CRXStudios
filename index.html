@@ -41,18 +41,18 @@
             align-items: center;
         }
 
-            .hero h1 {
-                font-size: 46px;
-                margin: 0 0 16px;
-            }
+        .hero h1 {
+            font-size: 46px;
+            margin: 0 0 16px;
+        }
 
-            .hero p {
-                font-size: 18px;
-                color: var(--muted);
-                line-height: 1.6;
-                max-width: 520px;
-                margin-bottom: 32px;
-            }
+        .hero p {
+            font-size: 18px;
+            color: var(--muted);
+            line-height: 1.6;
+            max-width: 520px;
+            margin-bottom: 32px;
+        }
 
         .buttons {
             display: flex;
@@ -79,10 +79,10 @@
             font-weight: 600;
         }
 
-            .btn-primary:hover,
-            .btn-secondary:hover {
-                transform: translateY(-1px);
-            }
+        .btn-primary:hover,
+        .btn-secondary:hover {
+            transform: translateY(-1px);
+        }
 
         /* ---------- HERO CARD ---------- */
         .preview {
@@ -109,15 +109,15 @@
             padding: 28px;
         }
 
-            .feature h3 {
-                margin: 0 0 10px;
-            }
+        .feature h3 {
+            margin: 0 0 10px;
+        }
 
-            .feature p {
-                margin: 0;
-                color: var(--muted);
-                line-height: 1.6;
-            }
+        .feature p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.6;
+        }
 
         /* ---------- FOOTER ---------- */
         footer {
@@ -133,9 +133,9 @@
                 grid-template-columns: 1fr;
             }
 
-                .hero h1 {
-                    font-size: 36px;
-                }
+            .hero h1 {
+                font-size: 36px;
+            }
         }
     </style>
 </head>
@@ -186,34 +186,34 @@
         </section>
 
         <footer>
-            © 2025 CRX Studios · GitHub Pages
+            Â© 2025 CRX Studios Â· GitHub Pages
         </footer>
 
     </div>
 
-    <!-- AUTO-LATEST DOWNLOAD SCRIPT -->
+    <!-- AUTO-LATEST DOWNLOAD SCRIPT (FIXED USERNAME) -->
     <script>
-        const owner = "coderan6-byte";
-        const repo = "CRXStudios";
-        const path = "contents/Downloads";
+    const owner = "coderyan6-byte";  // âœ… FIXED
+    const repo = "CRXStudios";
+    const path = "contents/Downloads";
 
-        fetch(`https://api.github.com/repos/${owner}/${repo}/${path}`)
-            .then(res => res.json())
-            .then(files => {
-                const versions = files
-                    .filter(f => f.type === "file")
-                    .sort((a, b) =>
-                        b.name.localeCompare(a.name, undefined, { numeric: true })
-                    );
+    fetch(`https://api.github.com/repos/${owner}/${repo}/${path}`)
+      .then(res => res.json())
+      .then(files => {
+        const versions = files
+          .filter(f => f.type === "file")
+          .sort((a, b) =>
+            b.name.localeCompare(a.name, undefined, { numeric: true })
+          );
 
-                if (versions.length > 0) {
-                    document.getElementById("downloadBtn").href =
-                        versions[0].download_url;
-                }
-            })
-            .catch(() => {
-                // fallback: button stays linked to Downloads page
-            });
+        if (versions.length > 0) {
+          document.getElementById("downloadBtn").href =
+            versions[0].download_url;
+        }
+      })
+      .catch(() => {
+        // fallback: button stays linked to Downloads page
+      });
     </script>
 
 </body>
