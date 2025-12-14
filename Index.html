@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Downloads</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            background: #f4f6f8;
+            padding: 40px;
+        }
+
+        .card {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+        }
+
+        .download {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+            .download:last-child {
+                border-bottom: none;
+            }
+
+        a {
+            font-weight: 600;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Downloads</h2>
+        <div id="list">Loading…</div>
+    </div>
+
+    <script>
+        const user = "YOUR_GITHUB_USERNAME";
+        const repo = "YOUR_REPO_NAME";
+        const path = "downloads"; // folder containing files
+
+        fetch(`https://api.github.com/repos/${user}/${repo}/contents/${path}`)
+            .then(res => res.json())
+            .then(files => {
+                files = files
+                    .filter(f => f.type === "file" && f.name !== "index.html")
+                    .sort((a, b) =>
+                        b.name.localeCompare(a.name, undefined, { numeric: true })
+                    );
+
+                document.getElementById("list").innerHTML =
+                    files.map(f => `
+                <div class="download">
+                    <span>${f.name}</span>
+                    <a href="${f.name}">Download</a>
+                </div>
+            `).join("");
+            })
+            .catch(() => {
+                document.getElementById("list").textContent =
+                    "Failed to load files.";
+            });
+    </script>
+
+</body>
+</html>
