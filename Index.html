@@ -1,83 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Downloads</title>
-    <style>
-        body {
-            font-family: system-ui, sans-serif;
-            background: #f4f6f8;
-            padding: 40px;
-        }
+<meta charset="UTF-8">
+<title>Downloads</title>
+<style>
+:root {
+    --bg: #f3f4f6;
+    --card: #ffffff;
+    --text: #111827;
+    --muted: #6b7280;
+    --accent: #2563eb;
+    --border: #e5e7eb;
+}
 
-        .card {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-        }
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
 
-        .download {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #ddd;
-        }
+.container {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
 
-            .download:last-child {
-                border-bottom: none;
-            }
+h1 {
+    font-size: 28px;
+    margin-bottom: 24px;
+}
 
-        a {
-            font-weight: 600;
-            text-decoration: none;
-        }
-    </style>
+.version-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.version-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.version-number {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.version-meta {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+.latest-badge {
+    display: inline-block;
+    background: #dbeafe;
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
+    margin-left: 10px;
+}
+
+.download-btn {
+    text-decoration: none;
+    background: var(--accent);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.download-btn:hover {
+    opacity: 0.9;
+}
+</style>
 </head>
 <body>
 
-    <div class="card">
-        <h2>Downloads</h2>
-        <div id="list">Loading…</div>
-    </div>
+<div class="container">
+    <h1>Downloads</h1>
+    <div id="versions">Loading…</div>
+</div>
 
 <script>
 const user = "coderyan6-byte";
 const repo = "CRXStudios";
-const path = "Downloads"; // MUST match folder name exactly
+const path = "Downloads";
 
 fetch(`https://api.github.com/repos/${user}/${repo}/contents/${path}`)
-  .then(res => {
-    if (!res.ok) throw new Error("GitHub API error");
-    return res.json();
-  })
+  .then(res => res.json())
   .then(files => {
     files = files
-      .filter(f =>
-        f.type === "file" &&
-        f.name.toLowerCase() !== "index.html"
-      )
+      .filter(f => f.type === "file")
       .sort((a, b) =>
         b.name.localeCompare(a.name, undefined, { numeric: true })
       );
 
-    document.getElementById("list").innerHTML =
-      files.map(f => `
-        <div class="download">
-          <span>${f.name}</span>
-          <a href="${path}/${f.name}">Download</a>
-        </div>
-      `).join("");
+    const container = document.getElementById("versions");
+    container.innerHTML = "";
+
+    files.forEach((file, index) => {
+        const versionMatch = file.name.match(/v([\d.]+)/i);
+        const version = versionMatch ? versionMatch[1] : "Unknown";
+
+        container.innerHTML += `
+            <div class="version-card">
+                <div class="version-info">
+                    <div class="version-number">
+                        Version ${version}
+                        ${index === 0 ? `<span class="latest-badge">Latest</span>` : ""}
+                    </div>
+                    <div class="version-meta">
+                        ${file.name}
+                    </div>
+                </div>
+                <a class="download-btn" href="${path}/${file.name}">
+                    Download
+                </a>
+            </div>
+        `;
+    });
   })
-  .catch(err => {
-    console.error(err);
-    document.getElementById("list").textContent =
-      "Failed to load files.";
+  .catch(() => {
+    document.getElementById("versions").textContent =
+        "Failed to load downloads.";
   });
 </script>
 
 </body>
 </html>
-
-
